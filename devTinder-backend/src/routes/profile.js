@@ -38,6 +38,7 @@ profileRouter.patch("/edit", userAuth, async (req, res) => {
         loggedInUser[key] = req.body[key];
       }
     });
+    loggedInUser.isProfileCompleted = true;
 
     await loggedInUser.save({ runValidators: true });
 

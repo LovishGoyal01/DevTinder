@@ -89,9 +89,9 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", function (next) {
   if (!this.photoURL || this.photoURL === "") {
     if (this.gender === "Female") {
-      this.photoURL = "https://example.com/female-avatar.png";
+      this.photoURL ="https://drive.google.com/file/d/11f51KxJdGMr0CFVSOQYffBui3o4Iv6Bm/view?usp=sharing";
     } else {
-      this.photoURL = "https://example.com/default-avatar.png";
+      this.photoURL ="https://drive.google.com/file/d/1b6g0bYNyKxFrhclHo2MGYYpzxg7FFS0P/view?usp=sharing";
     }
   }
   next();
