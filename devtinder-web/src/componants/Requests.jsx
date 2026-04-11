@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { addRequest, removeRequest } from "../utils/requestSlice";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const Base_URL = import.meta.env.VITE_BASE_URL;
 
