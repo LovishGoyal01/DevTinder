@@ -46,14 +46,13 @@ const userSchema = new mongoose.Schema({
             message : `{VALUE} is not valid gender type`
         },
     },
-    photoURL:{
-        type:String,
-        default: "https://raw.githubusercontent.com/LovishGoyal01/devTinder-backend/main/defaultAvatar.jpg",
-        validate(value){
-           if(!validator.isURL(value)){
+    photoURL: {
+        type: String,
+        validate(value) {
+          if (!validator.isURL(value)) {
             throw new Error("Not valid photoURL");
-           }
-        }   
+          }
+        }
     },
     about: {
       type: String,
@@ -86,6 +85,17 @@ const userSchema = new mongoose.Schema({
 {
   timestamps:true
 })
+
+userSchema.pre("save", function (next) {
+  if (!this.photoURL || this.photoURL === "") {
+    if (this.gender === "Female") {
+      this.photoURL = "https://example.com/female-avatar.png";
+    } else {
+      this.photoURL = "https://example.com/default-avatar.png";
+    }
+  }
+  next();
+});
 
 userSchema.methods.getJWT = function () {
 
