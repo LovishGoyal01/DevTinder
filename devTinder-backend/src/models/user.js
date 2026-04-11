@@ -89,9 +89,9 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", function (next) {
   if (!this.photoURL || this.photoURL === "") {
     if (this.gender === "Female") {
-      this.photoURL ="https://drive.google.com/file/d/11f51KxJdGMr0CFVSOQYffBui3o4Iv6Bm/view?usp=sharing";
+      this.photoURL ="https://res.cloudinary.com/dkfpmhm1h/image/upload/v1775919353/girl_lohuey.png";
     } else {
-      this.photoURL ="https://drive.google.com/file/d/1b6g0bYNyKxFrhclHo2MGYYpzxg7FFS0P/view?usp=sharing";
+      this.photoURL ="https://res.cloudinary.com/dkfpmhm1h/image/upload/v1775919348/boy_t5cyyl.jpg";
     }
   }
   next();

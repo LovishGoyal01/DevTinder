@@ -5,12 +5,16 @@ import { useEffect } from "react";
 
 const Profile = ()=> {
 
-  const user = useSelector((store) => store.user); 
+  const user = useSelector((store) => store.user.data); 
+  const isLoaded = useSelector((store) => store.user.isLoaded);
+
   useEffect(() => {
+    if (!isLoaded) return;
+
     if (user && !user.isProfileCompleted) {
-     toast.error("Complete Profile First");
+      toast.error("Complete Profile First");
     }
-  }, [user]);
+  }, [user, isLoaded]);
   
   return (
     <>

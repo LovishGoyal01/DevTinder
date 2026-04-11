@@ -23,7 +23,7 @@ const Login = ()=> {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((store)=>store.user);
+  const user = useSelector((store)=>store.user.data);
  
   useEffect(() => {
     if (!user) return;

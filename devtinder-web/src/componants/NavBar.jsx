@@ -1,19 +1,25 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { removeUser } from "../utils/userSlice";
 import toast from "react-hot-toast";
 
 const NavBar = () => {
   
   const Base_URL = import.meta.env.VITE_BASE_URL
 
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user?.data);
 
-  const handleClick = () => { 
-     if (user && !user.isProfileCompleted) {
-     toast.error("Complete Profile First");
-    }
+const handleLogoClick = () => {
+  if (!user) {
+    navigate("/login");
+  } else if (!user.isProfileCompleted) {
+    toast.error("Complete Profile First");
+    navigate("/profile");
+  } else {
+    navigate("/");
   }
+};
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,12 +36,12 @@ const NavBar = () => {
 
   return (
     <div className="flex justify-between navbar bg-gradient-to-b from-info-content to-info-content/90 shadow-sm fixed z-50 ">
-      <div onClick={handleClick} className="flex px-2 pb-1 h-13">
-        <Link to={!user ?  "/login" : user.isProfileCompleted ? "/" :"/profile"} className="flex items-center gap-1 text-xl font-bold text-white/90 hover:text-white px-2 py-1 rounded-lg hover:bg-white/10 transition">
-          <img src="/logo.png" className="w-15 h-15 mt-1" />
-          <span className="pr-2">DevTinder</span>
-        </Link>
-      </div>
+      <div onClick={handleLogoClick} className="flex px-2 pb-1 h-13 cursor-pointer">
+  <div className="flex items-center gap-1 text-xl font-bold text-white/90 hover:text-white px-2 py-1 rounded-lg hover:bg-white/10 transition">
+    <img src="/logo.png" className="w-15 h-15 mt-1" />
+    <span className="pr-2">DevTinder</span>
+  </div>
+</div>
 
       {user && (
         <div className="flex gap-3 items-center">
