@@ -87,7 +87,7 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.pre("save", function (next) {
-  if (!this.photoURL || this.photoURL === "") {
+  if (!this.photoURL || this.photoURL === "https://res.cloudinary.com/dkfpmhm1h/image/upload/v1775919348/boy_t5cyyl.jpg") {
     if (this.gender === "Female") {
       this.photoURL ="https://res.cloudinary.com/dkfpmhm1h/image/upload/v1775919353/girl_lohuey.png";
     } else {

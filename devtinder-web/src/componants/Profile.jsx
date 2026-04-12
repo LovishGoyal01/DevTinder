@@ -12,7 +12,9 @@ const Profile = ()=> {
     if (!isLoaded) return;
 
     if (user && !user.isProfileCompleted) {
-      toast.error("Complete Profile First");
+      setTimeout(() => {
+       toast.error("Complete Profile First");
+       }, 1000);
     }
   }, [user, isLoaded]);
   

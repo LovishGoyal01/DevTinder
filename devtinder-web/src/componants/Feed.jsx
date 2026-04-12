@@ -51,7 +51,6 @@ const Feed = () => {
           toast.success("Feed fetched successfully!");
         }
       } else {
-        toast.error(data.message);
         navigate("/login");
       }
     } catch (error) {
