@@ -98,10 +98,10 @@ const UserCard = ({ user }) => {
       </div>
 
       <div className="px-5 h-[215px] py-4 space-y-3">
-       
-          <p className="text-gray-400 h-[70px] text-sm text-muted-foreground leading-relaxed line-clamp-3">
-            {about || "Frontend engineer who loves clean UI, polished animations, and great team collaboration."}
-          </p>
+        <p className="text-gray-400 h-[70px] text-sm text-muted-foreground leading-relaxed line-clamp-3">
+          {about ||
+            "Frontend engineer who loves clean UI, polished animations, and great team collaboration."}
+        </p>
 
         <div className=" flex flex-wrap gap-2">
           {visibleSkills.map((skill, index) => (
@@ -121,7 +121,7 @@ const UserCard = ({ user }) => {
             </span>
           )}
         </div>
-        
+
         <div className="grid grid-cols-2 gap-3 border-t border-gray-600/70 ">
           <button
             className=" mt-2 flex items-center justify-center gap-2 rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:border-pink-500/50 hover:bg-slate-800"
@@ -136,7 +136,7 @@ const UserCard = ({ user }) => {
             disabled={isSending}
             onClick={() => handleSendRequest("interested", _id)}
           >
-            <AiOutlineHeart className="text-lg" />
+            <AiOutlineHeart className="text-lg " />
             Connect
           </button>
         </div>
