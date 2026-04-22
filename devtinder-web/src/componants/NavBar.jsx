@@ -1,66 +1,147 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
 import toast from "react-hot-toast";
+import { FiHome, FiUser, FiUsers, FiMail, FiLogOut } from "react-icons/fi";
 
 const NavBar = () => {
-  
-  const Base_URL = import.meta.env.VITE_BASE_URL
-
+  const Base_URL = import.meta.env.VITE_BASE_URL;
   const user = useSelector((store) => store.user?.data);
-
-const handleLogoClick = () => {
-  if (!user) {
-    navigate("/login");
-  } else if (!user.isProfileCompleted) {
-    toast.error("Complete Profile First");
-    navigate("/profile");
-  } else {
-    navigate("/");
-  }
-};
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogoClick = () => {
+    if (!user) {
+      navigate("/login");
+    } else if (!user.isProfileCompleted) {
+      toast.error("Complete Profile First");
+      navigate("/profile");
+    } else {
+      navigate("/");
+    }
+  };
 
   const handleLogout = async () => {
-    try{
-      await axios.post(Base_URL + "/logout",{}, { withCredentials: true, } );
+    try {
+      await axios.post(Base_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       navigate("/login");
-    }catch (err) {
+    } catch (err) {
       console.error(err);
     }
   };
 
-  return (
-    <div className="flex justify-between navbar bg-gradient-to-b from-info-content to-info-content/90 shadow-sm fixed z-50 ">
-      <div onClick={handleLogoClick} className="flex px-2 pb-1 h-13 cursor-pointer">
-  <div className="flex items-center gap-1 text-xl font-bold text-white/90 hover:text-white px-2 py-1 rounded-lg hover:bg-white/10 transition">
-    <img src="/logo.png" className="w-15 h-15 mt-1" />
-    <span className="pr-2">DevTinder</span>
-  </div>
-</div>
+  const isActive = (path) => location.pathname === path;
 
+  return (
+    <div className="navbar bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow-lg border-b border-slate-800/50 
+    fixed z-50 top-0 w-full px-6 py-3 ">
+      {/* Left - Logo */}
+      <div className="flex-1">
+        <div
+          onClick={handleLogoClick}
+          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
+        >
+          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">&lt;/&gt;</span>
+          </div>
+          <span className="text-xl font-bold">
+            <span className="text-white">Dev</span>
+            <span className="text-pink-500">Tinder</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Center - Navigation Buttons */}
       {user && (
-        <div className="flex gap-3 items-center">
-          <p className="text-white/90 text-md ">Welcome, <span className="font-semibold">{user.firstName}</span></p>
-          <div className="dropdown dropdown-end mx-5">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar ring-2 ring-pink-300/60 hover:ring-indigo-300/60">
-              <div className="w-10 rounded-full">
-                <img alt="User Photo" src={user.photoURL} />
+        <div className="flex gap-6 items-center">
+          {/* Feed Button */}
+          <Link
+            to="/"
+            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
+              isActive("/")
+                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            <FiHome className="text-base" />
+            <span>Feed</span>
+          </Link>
+
+          {/* Profile Button */}
+          <Link
+            to="/profile"
+            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
+              isActive("/profile")
+                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            <FiUser className="text-base" />
+            <span>Profile</span>
+          </Link>
+
+          {/* Connections Button */}
+          <Link
+            to="/connections/"
+            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
+              isActive("/connections")
+                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            <FiUsers className="text-base" />
+            <span>Connections</span>
+          </Link>
+
+          {/* Requests Button */}
+          <Link
+            to="/requests"
+            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
+              isActive("/requests")
+                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            <FiMail className="text-base" />
+            <span>Requests</span>
+          </Link>
+        </div>
+      )}
+
+      {/* Right - User Section */}
+      {user && (
+        <div className="flex-1 flex justify-end items-center gap-4">
+          <span className="text-gray-300 text-sm font-medium">
+            Hi,{" "}
+            <span className="font-semibold text-white">{user.firstName}</span>
+          </span>
+
+          {/* User Dropdown */}
+          <div className="dropdown dropdown-end">
+            <div
+              className="rounded-full avatar ring-2 ring-pink-500/50 hover:ring-pink-400  w-10 h-10"
+            >
+              <div className="rounded-full w-full h-full overflow-hidden">
+                <img
+                  alt="User Photo"
+                  src={user.photoURL}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-white/95 backdrop-blur-md rounded-xl mt-3 w-52 p-2 shadow-xl border border-pink-100">
-              <li><Link to="/profile">Profile</Link></li>
-              <li><Link to="/">Feed</Link></li>
-              <li><Link to="/connections">Connections</Link></li>
-              <li><Link to="/requests">Connection Requests</Link></li>
-              <div className="my-1 h-px bg-pink-100" />
-              <li><button onClick={handleLogout} className="text-pink-600 hover:bg-pink-50 rounded-lg">Logout</button></li>
-            </ul>
           </div>
+
+          {/* Logout Icon */}
+          <button
+            onClick={handleLogout}
+            className="btn btn-ghost btn-sm text-gray-400 hover:text-pink-400 transition-colors"
+            title="Quick Logout"
+          >
+            <FiLogOut className="text-lg" />
+          </button>
         </div>
       )}
     </div>

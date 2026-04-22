@@ -76,7 +76,7 @@ const Login = ()=> {
   }
 
  return (
-     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-rose-500 to-purple-800 px-4">
+     <div className="min-h-screen -mt-28 -mb-20 w-full flex items-center justify-center bg-gradient-to-b from-rose-500 to-purple-800 px-4">
     
        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full items-center">
 
