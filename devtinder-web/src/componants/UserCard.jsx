@@ -4,6 +4,7 @@ import { removeUserFromFeed } from "../utils/feedSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineClose, AiOutlineHeart } from "react-icons/ai";
+import { useLocation } from "react-router-dom";
 
 const UserCard = ({ user }) => {
   if (!user) return null;
