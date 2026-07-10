@@ -5,7 +5,6 @@ const { userAuth } = require("../middlewares/auth.js");
 const { validateEditProfileData } = require("../utils/validation.js");
 const bycrypt = require("bcrypt");
 const validator = require("validator");
-const openai = require("../utils/openai.js");
 
 const USER_SAFE_DATA = [
   "firstName",
@@ -38,6 +37,7 @@ profileRouter.patch("/edit", userAuth, async (req, res) => {
         loggedInUser[key] = req.body[key];
       }
     });
+    
     loggedInUser.isProfileCompleted = true;
 
     await loggedInUser.save({ runValidators: true });
@@ -52,42 +52,6 @@ profileRouter.patch("/edit", userAuth, async (req, res) => {
   }
 });
 
-profileRouter.get("/gptAbout", userAuth, async (req, res) => {
-  try {
-    const loggedInUser = req.user;
-
-    const gptResult = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You generate concise, professional developer bios for DevTinder.",
-        },
-        {
-          role: "user",
-          content: `Write a single About section with these rules:
-                   - Maximum 150 characters and Minimum 100 characters
-                   - Exactly one sentence
-                   - No emojis
-
-                   User data: Gender: ${loggedInUser.gender} About: ${loggedInUser.about} Skills: ${loggedInUser.skills?.join(", ")}`,
-        },
-      ],
-      max_tokens: 80,
-    });
-
-    const generatedAbout = gptResult.choices[0].message.content.trim();
-
-    res.json({
-      success: true,
-      message: `${loggedInUser.firstName}, your GPT profile was generated successfully`,
-      about: generatedAbout,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
 
 profileRouter.patch("/editpassword", userAuth, async (req, res) => {
   try {

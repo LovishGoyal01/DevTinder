@@ -6,7 +6,14 @@ const validSignUpdata= (req) =>{
 
     if(!firstName || !lastName || !emailId || !password){
          throw new Error("Something Is Missing");
-      }
+    }
+    if (firstName.trim().length < 3) {
+       throw new Error("First name must be at least 3 characters");
+    }
+  
+    if (lastName.trim().length < 3) {
+     throw new Error("Last name must be at least 3 characters");
+    }  
     if(!validator.isEmail(emailId)){
       throw new Error("Not valid email");
       }

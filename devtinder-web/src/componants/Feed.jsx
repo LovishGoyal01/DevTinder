@@ -24,11 +24,8 @@ const Feed = () => {
 
   useEffect(() => {
     if (!isLoaded) return;
-
     if (!user) {
       navigate("/login");
-    } else if (!user.isProfileCompleted) {
-      navigate("/profile");
     }
   }, [user, isLoaded]);
 

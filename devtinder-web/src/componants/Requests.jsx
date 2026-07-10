@@ -5,6 +5,7 @@ import { addRequest, removeRequest } from "../utils/requestSlice";
 import toast from "react-hot-toast";
 
 const Requests = () => {
+  const user = useSelector((store) => store.user.data);
   const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
 
@@ -18,8 +19,10 @@ const Requests = () => {
         withCredentials: true,
       });
       if (data.success) {
+        if(!requests || requests.length === 0) {
+          toast.success(data.message);
+        }
         dispatch(addRequest(data.connectionRequest));
-        toast.success(data.message);
       } else {
         toast.error(data.message);
       }
@@ -80,7 +83,7 @@ const Requests = () => {
   }
 
   return (
-    <div className="flex flex-col items-center pt-24 w-full max-w-[720px] mx-auto">
+    <div className="flex flex-col items-center  w-full max-w-[720px] mx-auto">
       <h1 className="font-bold text-2xl text-center mb-6 text-white">
         Requests
       </h1>

@@ -89,7 +89,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       .limit(limit + 1);
 
     const hasMore = users.length > limit;
-    if (hasMore) users.pop(); // remove extra record
+    if (hasMore) users.pop(); // removing extra record
 
     return res.json({ success: true, feed: users, hasMore });
   } catch (error) {

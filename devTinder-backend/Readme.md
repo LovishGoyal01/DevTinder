@@ -139,11 +139,5 @@ skip = (page-1)*limit;
 ## socket.io
 - npm i socket.io
 
-# Adding AI to enhance profile     
-- goto platform.openai.com
-- create new secret key in API keys
-- https://www.npmjs.com/package/openai/v/4.0.0-beta.4   goto this
-- npm install --save openai
-- created openai.js in utils
 
 devtinder-backend-production-3440.up.railway.app

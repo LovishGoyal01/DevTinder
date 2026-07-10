@@ -24,7 +24,6 @@ const App = () => {
           <Route path="connections" element={<Connections />} />
           <Route path="connections/:targetUserId" element={<Connections />} />
           <Route path="requests" element={<Requests />} />
-          <Route path="chat/:targetUserId" element={<Chat />} />
         </Route>
       </Routes>
     </>

@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
     },
     lastName:{
         type:String, 
+        minLength:3, 
+        maxLength:50,
         trim:true,   
     },
     emailId:{
@@ -57,7 +59,7 @@ const userSchema = new mongoose.Schema({
     about: {
       type: String,
       trim: true,
-      minlength: [75, "About must be at least 100 characters"],
+      minlength: [75, "About must be at least 75 characters"],
       maxlength: [150, "About must be at most 150 characters"],
       default: "This is your default about section where you can describe yourself, your interests, background, and personality so others can understand you better."
     },

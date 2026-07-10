@@ -28,6 +28,7 @@ authRouter.post("/signup", async (req, res) => {
 
     const passwordHash = await bycrypt.hash(password, 10);
 
+    // creating new instance of user model and saving it to database 
     const user = new User({
       firstName,
       lastName,
@@ -35,14 +36,14 @@ authRouter.post("/signup", async (req, res) => {
       password: passwordHash,
     });
 
-    const savedUser = await user.save();
-
+    const savedUser = await user.save();   // return promise of saved user object
+    
     const userSafeData = Object.fromEntries(
       Object.entries(savedUser.toObject()).filter(([key]) =>
         USER_SAFE_DATA.includes(key),
       ),
     );
-
+    
     const token = await savedUser.getJWT();
     res.cookie("token", token, {
       path: "/",

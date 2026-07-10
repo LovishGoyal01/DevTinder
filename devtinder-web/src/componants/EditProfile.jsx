@@ -17,10 +17,6 @@ const EditProfile = ({ user }) => {
   const [gender, setGender] = useState(user?.gender || "");
   const [about, setAbout] = useState(user?.about || "");
 
-  const [isAILoading, setIsAILoading] = useState(false);
-  const [aiAbout, setAiAbout] = useState("");
-  const [showAIPreview, setShowAIPreview] = useState(false);
-
   const [skillsInput, setSkillsInput] = useState(
     user?.skills?.join(", ") || "",
   );
@@ -86,64 +82,6 @@ const EditProfile = ({ user }) => {
     }
   };
 
-  const handleAIImprove = async () => {
-    try {
-      setIsAILoading(true);
-
-      const { data } = await axios.get(Base_URL + "/profile/gptAbout", {
-        withCredentials: true,
-      });
-
-      if (data.success) {
-        setAiAbout(data.about);
-        setShowAIPreview(true);
-        toast.success("AI suggestion ready ✨");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      const message = error?.response?.data?.message || "AI generation failed";
-      toast.error(message);
-    } finally {
-      setIsAILoading(false);
-    }
-  };
-
-  if (isAILoading) {
-    return (
-      <div className="flex flex-col justify-center items-center h-64">
-        <span className="loading loading-spinner loading-lg text-pink-500"></span>
-        <p className="mt-2 font-medium">Improving your profile with AI…</p>
-      </div>
-    );
-  }
-
-  if (showAIPreview) {
-    return (
-      <div className="flex flex-col justify-center items-center h-64 gap-4">
-        <p className="text-gray-700 text-center max-w-md">{aiAbout}</p>
-
-        <div className="flex gap-4">
-          <button
-            className="btn bg-green-500 text-white"
-            onClick={() => {
-              setAbout(aiAbout);
-              setShowAIPreview(false);
-            }}
-          >
-            Accept
-          </button>
-
-          <button
-            className="btn bg-gray-300"
-            onClick={() => setShowAIPreview(false)}
-          >
-            Reject
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex justify-center gap-10 ">
@@ -207,7 +145,7 @@ const EditProfile = ({ user }) => {
           />
 
           {/* Gender & Age */}
-          <div className="flex gap-4 mt-2">
+          <div className="flex gap-4 mt-1">
             <div className="flex-1">
               <label className="text-sm font-medium text-gray-600">
                 Gender
@@ -241,13 +179,6 @@ const EditProfile = ({ user }) => {
           <div className="mt-2">
             <div className="flex justify-between">
               <label className="text-sm font-medium text-gray-600">About</label>
-              <button
-                type="button"
-                onClick={handleAIImprove}
-                className="text-xs font-medium text-pink-500 hover:text-sm hover:font-semibold "
-              >
-                ✨ Improve with AI
-              </button>
             </div>
             <textarea
               className="textarea w-full resize-none h-[64px]"

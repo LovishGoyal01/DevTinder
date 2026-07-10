@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import NavBar from "./NavBar";
+import { User } from "lucide-react";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const Body = () => {
     if (!user) {
       fetchUser();
     }
-  }, []);
+  }, [user]);
 
   const fetchUser = async () => {
     try {

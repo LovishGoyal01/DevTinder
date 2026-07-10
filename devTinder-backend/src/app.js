@@ -37,7 +37,7 @@ app.use("/",authRouter);
 app.use("/profile",profileRouter);      
 app.use("/request",requestRouter);  
 app.use("/user",userRouter);    
-app.use("/",chatRouter);
+app.use("/chat",chatRouter);
 
 const server = http.createServer(app);
 initializeSocket(server);

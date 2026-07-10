@@ -2,7 +2,6 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
-import toast from "react-hot-toast";
 import { FiHome, FiUser, FiUsers, FiMail, FiLogOut } from "react-icons/fi";
 
 const NavBar = () => {
@@ -15,10 +14,7 @@ const NavBar = () => {
   const handleLogoClick = () => {
     if (!user) {
       navigate("/login");
-    } else if (!user.isProfileCompleted) {
-      toast.error("Complete Profile First");
-      navigate("/profile");
-    } else {
+    }else {
       navigate("/");
     }
   };
@@ -34,6 +30,7 @@ const NavBar = () => {
   };
 
   const isActive = (path) => location.pathname === path;
+  const isActive2 = (path) => location.pathname.startsWith(path);
 
   return (
     <div className="navbar bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow-lg border-b border-slate-800/50 
@@ -85,9 +82,9 @@ const NavBar = () => {
 
           {/* Connections Button */}
           <Link
-            to="/connections/"
+            to="/connections"
             className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
-              isActive("/connections")
+              isActive2("/connections/")
                 ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
                 : "text-gray-400 hover:text-gray-200"
             }`}

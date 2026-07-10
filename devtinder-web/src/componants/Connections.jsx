@@ -22,8 +22,10 @@ const Connections = () => {
       });
 
       if (data.success) {
+        if(!connections || connections.length === 0) {
+          toast.success(data.message);
+        }
         dispatch(addConnections(data.connections));
-        toast.success(data.message);
       } else {
         toast.error(data.message);
       }
@@ -76,7 +78,7 @@ const Connections = () => {
   }
 
   return (
-    <div className="flex flex-col fixed items-center pt-24 pb-24 w-full max-w-[1200px] mx-auto">
+    <div className="flex flex-col fixed items-center  pb-24 w-full max-w-[1200px] mx-auto">
 
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="lg:w-[380px] bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden">
@@ -107,12 +109,8 @@ const Connections = () => {
                       <h3 className="font-semibold text-slate-900">
                         {user.firstName} {user.lastName}
                       </h3>
-                      <h2>{user.age} {user.gender}</h2>
+                      <h2 className="font-semibold text-slate-700">{user.age} • {user.gender}</h2>
                       </div>
-                     
-                      <p className="text-sm text-slate-500 line-clamp-2">
-                        {user.about}
-                      </p>
                     </div>
                   </div>
                 </Link>
