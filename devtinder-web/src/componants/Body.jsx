@@ -25,7 +25,7 @@ const Body = () => {
     if (!user) {
       fetchUser();
     }
-  }, [user]);
+  }, []);
 
   const fetchUser = async () => {
     try {

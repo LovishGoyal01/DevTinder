@@ -9,6 +9,9 @@ const UserCard = ({ user }) => {
   if (!user) return null;
 
   const Base_URL = import.meta.env.VITE_BASE_URL;
+  const location = useLocation();
+
+  const isProfilePage = location.pathname === "/profile";
 
   const {
     _id,
@@ -52,6 +55,7 @@ const UserCard = ({ user }) => {
 
   const handleSendRequest = async (status, userId) => {
     try {
+      if(isProfilePage) return; // Preventing sending requests from the profile page
       setIsSending(true);
 
       const { data } = await axios.post(
