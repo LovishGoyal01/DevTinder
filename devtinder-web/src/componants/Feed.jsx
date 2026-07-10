@@ -86,7 +86,7 @@ const Feed = () => {
   }
 
   return (
-    <div className="flex justify-center px-4  pb-10">
+    <div className="flex justify-center px-4  pb-3">
       <div className="w-full max-w-[420px]">
         <UserCard user={feed[0]} />
       </div>

@@ -97,7 +97,7 @@ const EditProfile = ({ user }) => {
                 First Name
               </label>
               <input
-                className="input w-full"
+                className="input w-full text-black"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
@@ -108,7 +108,7 @@ const EditProfile = ({ user }) => {
                 Last Name
               </label>
               <input
-                className="input w-full"
+                className="input w-full text-black"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
@@ -151,7 +151,7 @@ const EditProfile = ({ user }) => {
                 Gender
               </label>
               <select
-                className="select w-full"
+                className="select w-full text-black"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
               >
@@ -168,7 +168,7 @@ const EditProfile = ({ user }) => {
               <label className="text-sm font-medium text-gray-600">Age</label>
               <input
                 type="number"
-                className="input w-full"
+                className="input w-full text-black"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
@@ -181,7 +181,7 @@ const EditProfile = ({ user }) => {
               <label className="text-sm font-medium text-gray-600">About</label>
             </div>
             <textarea
-              className="textarea w-full resize-none h-[64px]"
+              className="textarea w-full resize-none h-[64px] text-black"
               maxLength={150}
               value={about}
               onChange={(e) => setAbout(e.target.value)}
@@ -198,7 +198,7 @@ const EditProfile = ({ user }) => {
               Skills (comma separated)
             </label>
             <input
-              className="input w-full"
+              className="input w-full text-black"
               placeholder="React, Node.js, MongoDB"
               value={skillsInput}
               onChange={(e) => setSkillsInput(e.target.value)}

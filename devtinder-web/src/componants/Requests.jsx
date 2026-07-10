@@ -5,7 +5,6 @@ import { addRequest, removeRequest } from "../utils/requestSlice";
 import toast from "react-hot-toast";
 
 const Requests = () => {
-  const user = useSelector((store) => store.user.data);
   const requests = useSelector((store) => store.requests);
   const dispatch = useDispatch();
 
