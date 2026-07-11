@@ -38,10 +38,15 @@ const Chat = ({
   }, [propChatUser]);
 
   useEffect(() => {
+    console.log({
+    userId,
+    targetUserId,
+    });
     if (!userId || !targetUserId) return;
 
     socketRef.current = createSocketConnection();
-
+   
+    // As soon as page loads join the chat 
     socketRef.current.emit("joinChat", {
       userId,
       targetUserId,
@@ -60,7 +65,8 @@ const Chat = ({
         return [...prev, msg];
       });
     });
-
+ 
+    // this function will be called when the component unmounts or when userId or targetUserId changes 
     return () => {
       socketRef.current.disconnect();
     };
