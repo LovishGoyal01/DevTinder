@@ -6,6 +6,7 @@ const User = require("../models/user");
 const bycrypt = require("bcrypt");
 
 const USER_SAFE_DATA = [
+  "_id",
   "firstName",
   "lastName",
   "photoURL",
