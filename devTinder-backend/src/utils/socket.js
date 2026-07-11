@@ -11,8 +11,7 @@ const {Chat} = require("../models/chat")
       cors: {
       origin: [
         "http://localhost:5173",
-        "http://localhost:5174",
-        "https://devtinder-web-three.vercel.app"
+        "https://devtinder-omega.vercel.app"
       ],
       methods: ["GET", "POST"],
       credentials: true
