@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const USER_SAFE_DATA = [
+  "_id",
   "firstName",
   "lastName",
   "photoURL",
