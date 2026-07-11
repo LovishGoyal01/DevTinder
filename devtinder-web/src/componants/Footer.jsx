@@ -19,7 +19,7 @@ const Footer = () => {
 
         <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
           <a
-            href="https://twitter.com"
+            href="https://x.com/LovishGoyal2005"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter"
@@ -29,7 +29,7 @@ const Footer = () => {
           </a>
 
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/lovishgoyal01/"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
@@ -39,7 +39,7 @@ const Footer = () => {
           </a>
 
           <a
-            href="https://github.com"
+            href="https://github.com/LovishGoyal01"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
