@@ -39,6 +39,7 @@ const Chat = ({
 
   useEffect(() => {
     console.log({
+     user, 
     userId,
     targetUserId,
     });
