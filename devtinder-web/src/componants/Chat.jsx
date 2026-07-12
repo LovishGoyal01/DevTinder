@@ -38,11 +38,6 @@ const Chat = ({
   }, [propChatUser]);
 
   useEffect(() => {
-    console.log({
-     user, 
-    userId,
-    targetUserId,
-    });
     if (!userId || !targetUserId) return;
 
     socketRef.current = createSocketConnection();
