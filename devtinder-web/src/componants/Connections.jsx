@@ -65,7 +65,7 @@ const Connections = () => {
 
   if (connections.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] text-center">
+      <div className="flex flex-col  items-center justify-center h-[60vh] text-center">
         <h1 className="text-white text-2xl font-semibold mb-2">
           No connections yet 👋
         </h1>
@@ -78,7 +78,7 @@ const Connections = () => {
   }
 
   return (
-    <div className="flex flex-col fixed items-center  pb-24 w-full max-w-[1200px] mx-auto">
+    <div className="flex flex-col  fixed items-center   pb-24 w-full max-w-[1200px] mx-auto">
 
       <div className="flex flex-col lg:flex-row gap-4 w-full">
         <div className="lg:w-[380px] bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden">
@@ -91,7 +91,7 @@ const Connections = () => {
             </p>
           </div>
 
-          <div className="divide-y divide-slate-200">
+          <div className="divide-y divide-slate-200 overflow-y-auto no-scrollbar h-[calc(100vh-260px)]">
             {connections.map((user) => {
               const isActive = user._id === selectedUserId;
               return (
