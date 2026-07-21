@@ -91,7 +91,7 @@ const Login = ()=> {
              </>
            ) : (
              <>
-               <h1 className="text-4xl font-bold mb-4">Welcome to DevTinder 🚀</h1>
+               <h1 className="text-4xl font-bold mb-4">Welcome to DevMatch 🚀</h1>
                <p className="text-white/90 text-lg">
                  Discover developers, connect by interests, and grow your network.
                </p>

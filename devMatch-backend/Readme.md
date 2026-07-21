@@ -36,7 +36,7 @@
 
  - Create a free cluster on MongoDB official website (Mongo Atlas)
  - Install mongoose library
- - Connect your application to the Database "Connection-url"/devTinder
+ - Connect your application to the Database "Connection-url"/devmatch
  - Call the connectDB function and connect to database before starting application on 7777
  - Create a userSchema & user Model
  - Create POST /sigup API to add data to database
@@ -139,5 +139,3 @@ skip = (page-1)*limit;
 ## socket.io
 - npm i socket.io
 
-
-devtinder-backend-production-3440.up.railway.app

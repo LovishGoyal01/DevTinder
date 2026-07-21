@@ -11,7 +11,7 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        devtinder: {
+        devmatch: {
           "primary": "#ff3366",
           "secondary": "#1e293b",
           "accent": "#fbbf24",

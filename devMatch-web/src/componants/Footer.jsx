@@ -11,7 +11,7 @@ const Footer = () => {
               <span className="text-white font-bold text-xs">&lt;/&gt;</span>
             </div>
             <p className="text-sm text-gray-300 flex items-center gap-1">
-              © {new Date().getFullYear()} DevTinder. Made with
+              © {new Date().getFullYear()} DevMatch. Made with
               <Heart size={14} className="text-pink-500 fill-pink-500" />
             </p>
           </div>
