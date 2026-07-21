@@ -12,7 +12,7 @@ app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
       "http://localhost:5173",
-      "https://devtinder-omega.vercel.app",
+      process.env.Frontend_URL,
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
