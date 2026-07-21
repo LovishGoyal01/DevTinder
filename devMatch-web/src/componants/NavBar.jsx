@@ -46,7 +46,7 @@ const NavBar = () => {
           </div>
           <span className="text-xl font-bold">
             <span className="text-white">Dev</span>
-            <span className="text-pink-500">Tinder</span>
+            <span className="text-pink-500">Match</span>
           </span>
         </div>
       </div>

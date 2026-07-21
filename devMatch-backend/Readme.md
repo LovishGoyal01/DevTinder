@@ -88,7 +88,7 @@
  - Create UserSchema method to comparepassword(passwordInputByUser)
 
  - Explore tinder APIs
- - Create a list all API you can think of in Dev Tinder
+ - Create a list all API you can think of in DevMatch
  - Group multiple routes under repective routers
  - Read documentation for express.Router
  - Create routes folder for managing auth,profile, request routers
