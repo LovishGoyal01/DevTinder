@@ -1,9 +1,10 @@
-﻿import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { FiSend } from "react-icons/fi";
 
 const Chat = ({
   targetUserId: propTargetUserId,
@@ -19,63 +20,91 @@ const Chat = ({
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatUser, setChatUser] = useState(propChatUser);
-  const user = useSelector((store) => store.user.data);
+  const user = useSelector((store) => store.user?.data);
   const userId = user?._id;
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     setMessages([]);
-    if (!propChatUser) {
-      setChatUser(null);
-    }
+    setChatUser(propChatUser || null);
   }, [targetUserId, propChatUser]);
-
-  useEffect(() => {
-    if (propChatUser) {
-      setChatUser(propChatUser);
-    }
-  }, [propChatUser]);
 
   useEffect(() => {
     if (!userId || !targetUserId) return;
 
-    socketRef.current = createSocketConnection();
-   
-    // As soon as page loads join the chat 
-    socketRef.current.emit("joinChat", {
-      userId,
-      targetUserId,
+    const socket = createSocketConnection();
+    socketRef.current = socket;
+
+    socket.emit("joinChat", {
+      userId: String(userId),
+      targetUserId: String(targetUserId),
     });
 
-    socketRef.current.on("messageReceived", (msg) => {
+    const handleMessageReceived = (msg) => {
+      const msgSenderId = String(msg.senderId?._id || msg.senderId);
+      const msgTargetId = String(msg.targetUserId?._id || msg.targetUserId || "");
+
+      const currentUserIdStr = String(userId);
+      const currentTargetIdStr = String(targetUserId);
+
+      // Strictly verify message belongs to current chat conversation pair
+      const isFromCurrentPartner =
+        msgSenderId === currentTargetIdStr &&
+        (msgTargetId === currentUserIdStr || !msgTargetId);
+      const isFromMeToCurrentPartner =
+        msgSenderId === currentUserIdStr &&
+        (msgTargetId === currentTargetIdStr || !msgTargetId);
+
+      if (!isFromCurrentPartner && !isFromMeToCurrentPartner) return;
+
       setMessages((prev) => {
-        const lastMessage = prev[prev.length - 1];
         if (
-          msg.senderId === userId &&
-          lastMessage?.senderId === userId &&
-          lastMessage?.text === msg.text
+          msg._id &&
+          prev.some((m) => m._id && String(m._id) === String(msg._id))
         ) {
           return prev;
         }
-        return [...prev, msg];
+
+        const lastMessage = prev[prev.length - 1];
+        if (
+          lastMessage &&
+          String(lastMessage.senderId) === msgSenderId &&
+          lastMessage.text === msg.text
+        ) {
+          return prev;
+        }
+
+        return [
+          ...prev,
+          {
+            ...msg,
+            senderId: msgSenderId,
+          },
+        ];
       });
-    });
- 
-    // this function will be called when the component unmounts or when userId or targetUserId changes 
+    };
+
+    socket.off("messageReceived");
+    socket.on("messageReceived", handleMessageReceived);
+
     return () => {
-      socketRef.current.disconnect();
+      socket.off("messageReceived", handleMessageReceived);
     };
   }, [userId, targetUserId]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchMessages = async () => {
-      if (!targetUserId) return;
+      if (!targetUserId || !userId) return;
 
       try {
         const { data } = await axios.get(Base_URL + "/chat/" + targetUserId, {
           withCredentials: true,
         });
+
+        if (!isMounted) return;
 
         if (!data.success) {
           toast.error(data.message);
@@ -88,23 +117,31 @@ const Chat = ({
         }
 
         const chatMessages = (data.chat?.messages || []).map((msg) => {
-          const { senderId, text } = msg;
+          const senderIdObj = msg.senderId;
           return {
-            senderId: senderId?._id || senderId,
-            firstName: senderId?.firstName,
-            lastName: senderId?.lastName,
-            text,
+            _id: msg._id,
+            senderId: String(senderIdObj?._id || senderIdObj),
+            firstName: senderIdObj?.firstName,
+            lastName: senderIdObj?.lastName,
+            text: msg.text,
+            createdAt: msg.createdAt,
           };
         });
 
         setMessages(chatMessages);
       } catch (error) {
-        toast.error(error.message);
-        navigate("/connections");
+        if (isMounted) {
+          toast.error(error.message);
+          navigate("/connections");
+        }
       }
     };
 
     fetchMessages();
+
+    return () => {
+      isMounted = false;
+    };
   }, [targetUserId, propChatUser, userId, Base_URL, navigate]);
 
   useEffect(() => {
@@ -115,13 +152,13 @@ const Chat = ({
 
   const sendMessage = () => {
     const message = newMessage.trim();
-    if (!message || !socketRef.current || !targetUserId) return;
+    if (!message || !socketRef.current || !targetUserId || !userId) return;
 
     socketRef.current.emit("sendMessage", {
       firstName: user.firstName,
       lastName: user.lastName,
-      userId,
-      targetUserId,
+      userId: String(userId),
+      targetUserId: String(targetUserId),
       text: message,
     });
 
@@ -130,25 +167,17 @@ const Chat = ({
 
   const containerClass = embedded
     ? "flex flex-col h-full"
-    : "pt-24 flex justify-center";
+    : "pt-4 flex justify-center w-full max-w-4xl mx-auto";
   const cardClass = embedded
-    ? "flex-1 bg-white/0 max-h-[75vh]"
-    : "w-[50vw] h-[75vh] max-h-[75vh] bg-white/80";
+    ? "flex-1 glass-card border-none bg-transparent"
+    : "w-full h-[75vh] glass-card rounded-3xl border border-slate-800 shadow-2xl";
 
   if (!targetUserId) {
     return (
       <div className={containerClass}>
-        <div
-          className={`${cardClass} flex items-center justify-center rounded-2xl shadow-xl p-8`}
-        >
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-2">
-              Select a conversation
-            </h2>
-            <p className="text-slate-600">
-              Choose someone from your connections to start chatting.
-            </p>
-          </div>
+        <div className={`${cardClass} flex flex-col items-center justify-center p-8 text-center`}>
+          <h2 className="text-xl font-bold text-white mb-1">Select a conversation</h2>
+          <p className="text-xs text-slate-400">Choose someone from your connections to start messaging.</p>
         </div>
       </div>
     );
@@ -156,48 +185,52 @@ const Chat = ({
 
   return (
     <div className={containerClass}>
-      <div
-        className={`${cardClass} ${embedded ? "h-full" : "h-[75vh]"} bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl flex flex-col overflow-hidden`}
-      >
-        <div className="px-6 py-4 border-b bg-white/70 flex items-center gap-4">
-          {chatUser?.photoURL ? (
-            <img
-              src={chatUser.photoURL}
-              alt={chatUser.firstName + " " + chatUser.lastName}
-              className="w-12 h-12 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-12 h-12 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-lg">
-              {chatUser?.firstName?.[0] || "C"}
-            </div>
-          )}
-          <div>
-            <h1 className="text-lg font-semibold text-gray-800">
+      <div className={`${cardClass} flex flex-col h-full overflow-hidden`}>
+        {/* Chat Header */}
+        <div className="px-6 py-3.5 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            {chatUser?.photoURL ? (
+              <div className="relative">
+                <img
+                  src={chatUser.photoURL}
+                  alt={chatUser.firstName + " " + chatUser.lastName}
+                  className="w-10 h-10 rounded-xl object-cover border border-slate-700"
+                />
+                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-slate-950 rounded-full" />
+              </div>
+            ) : (
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 text-white flex items-center justify-center font-bold text-base shadow-md">
+                {chatUser?.firstName?.[0] || "C"}
+              </div>
+            )}
+            <h1 className="text-sm font-bold text-white tracking-tight">
               {chatUser ? `${chatUser.firstName} ${chatUser.lastName}` : "Chat"}
             </h1>
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-4">
+        {/* Message Stream */}
+        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-6 py-4 space-y-3 bg-slate-950/30">
           {messages.length === 0 && (
-            <div className="h-full flex items-center justify-center">
-              <p className="text-gray-400 text-sm">
+            <div className="h-full flex flex-col items-center justify-center text-center py-12">
+              <p className="text-slate-400 text-xs">
                 No messages yet. Say hello 👋
               </p>
             </div>
           )}
+
           {messages.map((msg, index) => {
-            const isMe = msg.senderId === userId;
+            const isMe = String(msg.senderId?._id || msg.senderId) === String(userId);
             return (
               <div
-                key={index}
+                key={msg._id || index}
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[70%] px-4 py-2 rounded-2xl text-sm shadow ${
+                  className={`max-w-[75%] px-4 py-2.5 text-xs sm:text-sm font-medium leading-relaxed shadow-md ${
                     isMe
-                      ? "bg-blue-600 text-white rounded-br-none"
-                      : "bg-emerald-500 text-white rounded-bl-none"
+                      ? "bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white rounded-2xl rounded-tr-none shadow-pink-500/10"
+                      : "bg-slate-800/90 text-slate-100 border border-slate-700/70 rounded-2xl rounded-tl-none"
                   }`}
                 >
                   {msg.text}
@@ -208,7 +241,8 @@ const Chat = ({
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="flex items-center gap-3 px-4 py-3 border-t bg-white/90">
+        {/* Input Bar */}
+        <div className="px-4 py-3 border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-md flex items-center gap-2 shrink-0">
           <input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
@@ -219,13 +253,15 @@ const Chat = ({
               }
             }}
             placeholder="Type a message..."
-            className="flex-1 text-black px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 bg-slate-900/90 border border-slate-800 text-white text-xs sm:text-sm px-4 py-2.5 rounded-xl placeholder-slate-500 focus:border-pink-500 transition"
           />
           <button
             onClick={sendMessage}
-            className="px-5 py-2 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            disabled={!newMessage.trim()}
+            className="p-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white shadow-lg shadow-pink-500/20 transition disabled:opacity-40 shrink-0"
+            title="Send message"
           >
-            Send
+            <FiSend className="text-base" />
           </button>
         </div>
       </div>

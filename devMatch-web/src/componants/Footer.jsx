@@ -3,29 +3,39 @@ import { Heart } from "lucide-react";
 
 const Footer = () => {
   return (
-    <div>
-      <footer className="footer sm:footer-horizontal fixed bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-t border-slate-800/50 text-gray-400 items-center p-4 bottom-0 w-full">
-        <aside className="grid-flow-col items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-purple-600 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-xs">&lt;/&gt;</span>
+    <footer className="glass-nav fixed bottom-0 left-0 right-0 z-40 px-4 md:px-8 py-2.5 text-slate-400 border-t border-slate-800/60 shadow-lg">
+      <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-medium">
+        {/* Left - Brand & Heart */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-5 h-5 bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500 rounded-md p-0.5 shadow-sm flex items-center justify-center shrink-0">
+            <div className="w-full h-full bg-slate-950 rounded-[4px] flex items-center justify-center">
+              <span className="text-pink-400 font-extrabold text-[9px] tracking-tighter">&lt;/&gt;</span>
             </div>
-            <p className="text-sm text-gray-300 flex items-center gap-1">
-              © {new Date().getFullYear()} DevMatch. Made with
-              <Heart size={14} className="text-pink-500 fill-pink-500" />
-            </p>
           </div>
-        </aside>
+          <span className="text-slate-300 flex items-center gap-1.5 text-xs font-semibold">
+            <span>© {new Date().getFullYear()}</span>
+            <span className="hidden sm:inline text-white font-bold">DevMatch</span>
+            <span className="hidden sm:inline text-slate-500">•</span>
+            <span className="flex items-center gap-1">
+              Built with
+              <Heart size={12} className="text-pink-500 fill-pink-500 animate-pulse inline-block" />
+              for developers
+            </span>
+          </span>
+        </div>
 
-        <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+
+        {/* Right - Social Links */}
+        <div className="flex items-center gap-2">
           <a
             href="https://x.com/LovishGoyal2005"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Twitter"
-            className="text-gray-400 hover:text-pink-400 transition-colors duration-200 hover:scale-110 transform"
+            aria-label="X / Twitter"
+            className="p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 hover:border-sky-500/40 text-slate-400 hover:text-sky-400 transition-all duration-200 group shadow-sm"
+            title="Twitter / X"
           >
-            <FaTwitter size={20} />
+            <FaTwitter size={14} className="group-hover:scale-110 transition-transform" />
           </a>
 
           <a
@@ -33,9 +43,10 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="text-gray-400 hover:text-pink-400 transition-colors duration-200 hover:scale-110 transform"
+            className="p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 hover:border-blue-500/40 text-slate-400 hover:text-blue-400 transition-all duration-200 group shadow-sm"
+            title="LinkedIn"
           >
-            <FaLinkedin size={20} />
+            <FaLinkedin size={14} className="group-hover:scale-110 transition-transform" />
           </a>
 
           <a
@@ -43,13 +54,14 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="text-gray-400 hover:text-pink-400 transition-colors duration-200 hover:scale-110 transform"
+            className="p-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800/80 hover:border-purple-500/40 text-slate-400 hover:text-slate-100 transition-all duration-200 group shadow-sm"
+            title="GitHub"
           >
-            <FaGithub size={20} />
+            <FaGithub size={14} className="group-hover:scale-110 transition-transform" />
           </a>
-        </nav>
-      </footer>
-    </div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

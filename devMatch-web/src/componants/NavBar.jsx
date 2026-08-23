@@ -2,6 +2,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { removeUser } from "../utils/userSlice";
+import { disconnectSocket } from "../utils/socket";
 import { FiHome, FiUser, FiUsers, FiMail, FiLogOut } from "react-icons/fi";
 
 const NavBar = () => {
@@ -22,6 +23,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(Base_URL + "/logout", {}, { withCredentials: true });
+      disconnectSocket();
       dispatch(removeUser());
       navigate("/login");
     } catch (err) {
@@ -33,115 +35,133 @@ const NavBar = () => {
   const isActive2 = (path) => location.pathname.startsWith(path);
 
   return (
-    <div className="navbar bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow-lg border-b border-slate-800/50 
-    fixed z-50 top-0 w-full px-6 py-3 ">
-      {/* Left - Logo */}
-      <div className="flex-1">
-        <div
-          onClick={handleLogoClick}
-          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
-        >
-          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">&lt;/&gt;</span>
+    <header className="glass-nav fixed top-0 left-0 right-0 z-50 px-4 md:px-8 py-3 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Left - Logo */}
+        <div className="flex items-center">
+          <div
+            onClick={handleLogoClick}
+            className="flex items-center gap-3 cursor-pointer group"
+          >
+            <div className="w-9 h-9 bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500 rounded-xl p-0.5 shadow-lg shadow-pink-500/20 group-hover:shadow-pink-500/40 group-hover:scale-105 transition-all duration-200">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <span className="text-pink-400 font-extrabold text-sm tracking-tighter group-hover:text-pink-300">&lt;/&gt;</span>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-black tracking-tight flex items-center">
+                <span className="text-white">Dev</span>
+                <span className="text-gradient-pink">Match</span>
+              </span>
+              <span className="text-[10px] text-slate-400 font-medium -mt-1 tracking-wider uppercase">Dev Network</span>
+            </div>
           </div>
-          <span className="text-xl font-bold">
-            <span className="text-white">Dev</span>
-            <span className="text-pink-500">Match</span>
-          </span>
         </div>
-      </div>
 
-      {/* Center - Navigation Buttons */}
-      {user && (
-        <div className="flex gap-6 items-center">
-          {/* Feed Button */}
-          <Link
-            to="/"
-            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
-              isActive("/")
-                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
-                : "text-gray-400 hover:text-gray-200"
-            }`}
-          >
-            <FiHome className="text-base" />
-            <span>Feed</span>
-          </Link>
-
-          {/* Profile Button */}
-          <Link
-            to="/profile"
-            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
-              isActive("/profile")
-                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
-                : "text-gray-400 hover:text-gray-200"
-            }`}
-          >
-            <FiUser className="text-base" />
-            <span>Profile</span>
-          </Link>
-
-          {/* Connections Button */}
-          <Link
-            to="/connections"
-            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
-              isActive2("/connections/")
-                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
-                : "text-gray-400 hover:text-gray-200"
-            }`}
-          >
-            <FiUsers className="text-base" />
-            <span>Connections</span>
-          </Link>
-
-          {/* Requests Button */}
-          <Link
-            to="/requests"
-            className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-2xl transition-all font-medium ${
-              isActive("/requests")
-                ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/30"
-                : "text-gray-400 hover:text-gray-200"
-            }`}
-          >
-            <FiMail className="text-base" />
-            <span>Requests</span>
-          </Link>
-        </div>
-      )}
-
-      {/* Right - User Section */}
-      {user && (
-        <div className="flex-1 flex justify-end items-center gap-4">
-          <span className="text-gray-300 text-sm font-medium">
-            Hi,{" "}
-            <span className="font-semibold text-white">{user.firstName}</span>
-          </span>
-
-          {/* User Dropdown */}
-          <div className="dropdown dropdown-end">
-            <div
-              className="rounded-full avatar ring-2 ring-pink-500/50 hover:ring-pink-400  w-10 h-10"
+        {/* Center - Navigation Items */}
+        {user && (
+          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80 shadow-inner">
+            {/* Feed Link */}
+            <Link
+              to="/"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isActive("/")
+                  ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
+              }`}
             >
-              <div className="rounded-full w-full h-full overflow-hidden">
+              <FiHome className="text-base" />
+              <span>Feed</span>
+            </Link>
+
+            {/* Profile Link */}
+            <Link
+              to="/profile"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isActive("/profile")
+                  ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
+              }`}
+            >
+              <FiUser className="text-base" />
+              <span>Profile</span>
+            </Link>
+
+            {/* Connections Link */}
+            <Link
+              to="/connections"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isActive2("/connections")
+                  ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
+              }`}
+            >
+              <FiUsers className="text-base" />
+              <span>Connections</span>
+            </Link>
+
+            {/* Requests Link */}
+            <Link
+              to="/requests"
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isActive("/requests")
+                  ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md shadow-pink-500/25"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
+              }`}
+            >
+              <FiMail className="text-base" />
+              <span>Requests</span>
+            </Link>
+          </nav>
+        )}
+
+        {/* Right - User Avatar & Quick Actions */}
+        {user && (
+          <div className="flex items-center gap-3">
+            {/* Mobile Nav Links Icon Bar */}
+            <div className="flex md:hidden items-center gap-2 mr-1">
+              <Link to="/" className={`p-2 rounded-lg ${isActive('/') ? 'text-pink-400' : 'text-slate-400'}`}>
+                <FiHome className="text-lg" />
+              </Link>
+              <Link to="/connections" className={`p-2 rounded-lg ${isActive2('/connections') ? 'text-pink-400' : 'text-slate-400'}`}>
+                <FiUsers className="text-lg" />
+              </Link>
+              <Link to="/requests" className={`p-2 rounded-lg ${isActive('/requests') ? 'text-pink-400' : 'text-slate-400'}`}>
+                <FiMail className="text-lg" />
+              </Link>
+            </div>
+
+            <div className="hidden sm:flex flex-col text-right">
+              <span className="text-xs text-slate-400 font-medium">Logged in as</span>
+              <span className="text-sm font-bold text-slate-100 leading-tight">
+                {user.firstName} {user.lastName ? user.lastName[0] + "." : ""}
+              </span>
+            </div>
+
+            {/* Avatar with status ring */}
+            <Link to="/profile" className="relative group cursor-pointer">
+              <div className="w-10 h-10 rounded-xl overflow-hidden p-0.5 bg-gradient-to-br from-pink-500 to-purple-600 group-hover:scale-105 transition-transform duration-200 shadow-md">
                 <img
                   alt="User Photo"
                   src={user.photoURL}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-[10px]"
                 />
               </div>
-            </div>
-          </div>
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-950 rounded-full" />
+            </Link>
 
-          {/* Logout Icon */}
-          <button
-            onClick={handleLogout}
-            className="btn btn-ghost btn-sm text-gray-400 hover:text-pink-400 transition-colors"
-            title="Quick Logout"
-          >
-            <FiLogOut className="text-lg" />
-          </button>
-        </div>
-      )}
-    </div>
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="p-2.5 rounded-xl bg-slate-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-500/30 transition-all duration-200"
+              title="Log out"
+            >
+              <FiLogOut className="text-base" />
+            </button>
+          </div>
+        )}
+      </div>
+    </header>
   );
 };
 

@@ -1,13 +1,66 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* ✅ Global input focus styles */
+/* ✅ Global input & interactive focus styles */
 input:focus,
 textarea:focus,
 select:focus {
-  outline: none;
-  border-color: #6366f1; /* indigo-500 */
-  box-shadow: 0 0 0 1px #6366f1;
+  outline: none !important;
+  border-color: #ec4899 !important; /* pink-500 */
+  box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.25) !important;
+}
+
+/* Custom Scrollbar for Chat & Connection Lists */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.6);
+}
+
+/* Utility classes for Glassmorphism UI */
+.glass-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(236, 72, 153, 0.3);
+  box-shadow: 0 12px 30px -10px rgba(236, 72, 153, 0.15);
+}
+
+.glass-nav {
+  background: rgba(3, 7, 18, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Glowing text gradients */
+.text-gradient-pink {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Hide scrollbar */
@@ -19,3 +72,4 @@ select:focus {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
 }
+

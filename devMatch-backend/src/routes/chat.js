@@ -18,8 +18,8 @@ chatRouter.get("/:targetUserId",userAuth, async (req,res)=>{
         return res.json({success:false, message: "You are not friends" });
      }
 
-     let chat =await Chat.findOne({
-        participants:{$all : [userId,targetUserId]},
+     let chat = await Chat.findOne({
+        participants: { $all: [userId, targetUserId], $size: 2 },
      }).populate({
         path:"messages.senderId",
         select:"firstName lastName"
